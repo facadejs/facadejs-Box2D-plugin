@@ -101,7 +101,13 @@
 
             this._box2d = {
                 entity: world.GetBodyList(),
-                config: config
+                config: config,
+                callback: {
+                    BeginContact: null,
+                    EndContact: null,
+                    PostSolve: null,
+                    PreSolve: null
+                }
             };
 
             return this;
@@ -144,7 +150,12 @@
 
         getPosition: function () {
 
+            var vector = this._box2d.entity.GetPosition();
 
+            return {
+                x: vector.x,
+                y: vector.y
+            };
 
         },
 
@@ -161,9 +172,23 @@
 
         },
 
+        setCallback: function (type, callback) {
+
+            if (this._box2d.callback[type] !== undefined) {
+
+                this._box2d.callback[type] = callback;
+
+            } else {
+
+                displayErrorMessage(type + ' is not a valid callback type.');
+
+            }
+
+        },
+
         setPosition: function (x, y) {
 
-
+            this._box2d.entity.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
 
         },
 
