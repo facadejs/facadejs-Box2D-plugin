@@ -47,6 +47,8 @@
 
             });
 
+            body.userData = this;
+
             if (config.type === 'dynamic') {
 
                 body.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
@@ -106,13 +108,21 @@
 
         },
 
-        destroyObject: function (world) {
+        destroyObject: function () {
 
-            if (this._box2d !== undefined) {
+            var self = this;
 
-                world.DestroyBody(this._box2d.entity);
+            if (self._box2d !== undefined) {
 
-                delete this._box2d;
+                self._box2d.entity.SetUserData(null);
+
+                setTimeout(function () {
+
+                    self._box2d.entity.GetWorld().DestroyBody(self._box2d.entity);
+
+                    delete self._box2d;
+
+                }, 0);
 
             }
 
