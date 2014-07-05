@@ -146,7 +146,7 @@
                 defaults = {
                     canvas: null,
                     gravity: 40,
-                    sleep: false
+                    sleep: true
                 };
 
             if (config === undefined) {
@@ -319,6 +319,8 @@
                     y = 0;
 
                 }
+
+                this._box2d.entity.SetAwake(true);
 
                 this._box2d.entity.SetLinearVelocity(
                     new Box2D.Common.Math.b2Vec2(x, y),
