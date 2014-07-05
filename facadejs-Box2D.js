@@ -109,12 +109,13 @@
 
         },
 
-        createWorld: function (stage, config) {
+        createWorld: function (config) {
 
             var world,
                 listener = new Box2D.Dynamics.b2ContactListener(),
                 debugDraw = new Box2D.Dynamics.b2DebugDraw(),
                 defaults = {
+                    canvas: null,
                     gravity: 40,
                     sleep: false
                 };
@@ -162,12 +163,25 @@
 
             world.SetContactListener(listener);
 
-            debugDraw.SetSprite(stage.context);
-            debugDraw.SetDrawScale(30);
-            debugDraw.SetFillAlpha(0.3);
-            debugDraw.SetLineThickness(1.0);
-            debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit);
-            world.SetDebugDraw(debugDraw);
+            if (config.canvas) {
+
+                if (config.canvas instanceof Facade) {
+
+                    debugDraw.SetSprite(config.canvas.context);
+
+                } else if (typeof config.canvas === 'object' && config.canvas.nodeType === 1) {
+
+                    debugDraw.SetSprite(config.canvas.getContext('2d'));
+
+                }
+
+                debugDraw.SetDrawScale(30);
+                debugDraw.SetFillAlpha(0.3);
+                debugDraw.SetLineThickness(1.0);
+                debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit);
+                world.SetDebugDraw(debugDraw);
+
+            }
 
             this._box2d = {
                 entity: world,
