@@ -28,7 +28,7 @@
 
         if (b && typeof b._box2d.callback[this.type] === 'function') {
 
-            b._box2d.callback[this.type].call(b, a, b);
+            b._box2d.callback[this.type].call(b, b, a);
 
         }
 
