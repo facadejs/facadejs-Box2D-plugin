@@ -9,6 +9,12 @@
         methods,
         TO_DEGREES = 180 / Math.PI;
 
+    function hasBox2DEntityRef(obj) {
+
+        return obj._box2d !== undefined && obj._box2d.entity !== undefined;
+
+    }
+
     function resolveContactListener(entities) {
 
         var a = entities.GetFixtureA().GetBody().GetUserData(),
@@ -200,7 +206,7 @@
 
         drawDebug: function () {
 
-            if (this._box2d.entity instanceof Box2D.Dynamics.b2World) {
+            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof Box2D.Dynamics.b2World) {
 
                 this._box2d.entity.DrawDebugData();
 
@@ -212,7 +218,7 @@
 
             var self = this;
 
-            if (self._box2d !== undefined) {
+            if (hasBox2DEntityRef(this)) {
 
                 self._box2d.entity.SetUserData(null);
 
@@ -230,7 +236,7 @@
 
         getCurrentState: function () {
 
-            if (this._box2d !== undefined) {
+            if (hasBox2DEntityRef(this)) {
 
                 return {
                     x: this._box2d.entity.GetPosition().x * this._box2d.config.scale,
@@ -244,18 +250,22 @@
 
         getPosition: function () {
 
-            var vector = this._box2d.entity.GetPosition();
+            if (hasBox2DEntityRef(this)) {
 
-            return {
-                x: vector.x,
-                y: vector.y
-            };
+                var vector = this._box2d.entity.GetPosition();
+
+                return {
+                    x: vector.x,
+                    y: vector.y
+                };
+
+            }
 
         },
 
         getVelocity: function () {
 
-            if (this._box2d !== undefined) {
+            if (hasBox2DEntityRef(this)) {
 
                 return {
                     x: this._box2d.entity.m_linearVelocity.x,
@@ -268,13 +278,17 @@
 
         setCallback: function (type, callback) {
 
-            if (this._box2d.callback[type] !== undefined) {
+            if (hasBox2DEntityRef(this)) {
 
-                this._box2d.callback[type] = callback;
+                if (this._box2d.callback[type] !== undefined) {
 
-            } else {
+                    this._box2d.callback[type] = callback;
 
-                console.error(type + ' is not a valid callback type.');
+                } else {
+
+                    console.error(type + ' is not a valid callback type.');
+
+                }
 
             }
 
@@ -282,13 +296,17 @@
 
         setPosition: function (x, y) {
 
-            this._box2d.entity.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
+            if (hasBox2DEntityRef(this)) {
+
+                this._box2d.entity.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
+
+            }
 
         },
 
         setVelocity: function (x, y) {
 
-            if (this._box2d !== undefined) {
+            if (hasBox2DEntityRef(this)) {
 
                 if (x === undefined) {
 
@@ -313,7 +331,7 @@
 
         step: function () {
 
-            if (this._box2d.entity instanceof Box2D.Dynamics.b2World) {
+            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof Box2D.Dynamics.b2World) {
 
                 this._box2d.entity.Step(1 / 60, 8, 3);
 
