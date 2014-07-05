@@ -5,7 +5,30 @@
 
     'use strict';
 
-    var methods = {
+    var contactListeners = ['PreSolve', 'PostSolve', 'BeginContact', 'EndContact'],
+        methods,
+        TO_DEGREES = 180 / Math.PI;
+
+    function resolveContactListener(entities) {
+
+        var a = entities.GetFixtureA().GetBody().GetUserData(),
+            b = entities.GetFixtureB().GetBody().GetUserData();
+
+        if (a && typeof a._box2d.callback[this.type] === 'function') {
+
+            a._box2d.callback[this.type].call(a, a, b);
+
+        }
+
+        if (b && typeof b._box2d.callback[this.type] === 'function') {
+
+            b._box2d.callback[this.type].call(b, a, b);
+
+        }
+
+    }
+
+    methods = {
 
         createObject: function (world, config) {
 
@@ -138,26 +161,9 @@
 
             world = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, config.gravity), config.sleep);
 
-            ['PreSolve', 'PostSolve', 'BeginContact', 'EndContact'].forEach(function (type) {
+            contactListeners.forEach(function (type) {
 
-                listener[type] = (function (entities) {
-
-                    var a = entities.GetFixtureA().GetBody().GetUserData(),
-                        b = entities.GetFixtureB().GetBody().GetUserData();
-
-                    if (a && typeof a._box2d.callback[this.type] === 'function') {
-
-                        a._box2d.callback[this.type].call(a, a, b);
-
-                    }
-
-                    if (b && typeof b._box2d.callback[this.type] === 'function') {
-
-                        b._box2d.callback[this.type].call(b, a, b);
-
-                    }
-
-                }).bind({ type: type });
+                listener[type] = resolveContactListener.bind({ type: type });
 
             });
 
@@ -229,7 +235,7 @@
                 return {
                     x: this._box2d.entity.GetPosition().x * this._box2d.config.scale,
                     y: this._box2d.entity.GetPosition().y * this._box2d.config.scale,
-                    rotate: this._box2d.entity.GetAngle() * (180 / Math.PI)
+                    rotate: this._box2d.entity.GetAngle() * TO_DEGREES
                 };
 
             }
