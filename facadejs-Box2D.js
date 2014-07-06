@@ -1,4 +1,4 @@
-/*jslint browser: true, nomen: true */
+/*jslint browser: true, newcap: true, nomen: true */
 /*globals Facade, Box2D */
 
 (function (Facade) {
