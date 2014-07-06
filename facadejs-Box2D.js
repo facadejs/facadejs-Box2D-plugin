@@ -5,9 +5,20 @@
 
     'use strict';
 
-    var contactListeners = ['PreSolve', 'PostSolve', 'BeginContact', 'EndContact'],
-        methods,
-        TO_DEGREES = 180 / Math.PI;
+    var methods,
+
+        TO_DEGREES = 180 / Math.PI,
+
+        contactListeners = ['PreSolve', 'PostSolve', 'BeginContact', 'EndContact'],
+
+        b2Body = Box2D.Dynamics.b2Body,
+        b2BodyDef = Box2D.Dynamics.b2BodyDef,
+        b2ContactListener = Box2D.Dynamics.b2ContactListener,
+        b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
+        b2FixtureDef = Box2D.Dynamics.b2FixtureDef,
+        b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
+        b2Vec2 = Box2D.Common.Math.b2Vec2,
+        b2World = Box2D.Dynamics.b2World;
 
     function hasBox2DEntityRef(obj) {
 
@@ -38,8 +49,8 @@
 
         createObject: function (world, config) {
 
-            var body = new Box2D.Dynamics.b2BodyDef(),
-                fixture = new Box2D.Dynamics.b2FixtureDef(),
+            var body = new b2BodyDef(),
+                fixture = new b2FixtureDef(),
                 options = this._configOptions(this.getAllOptions()),
                 metrics = this.getAllMetrics(),
                 vertices = [],
@@ -73,22 +84,22 @@
 
             if (config.type === 'dynamic') {
 
-                body.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+                body.type = b2Body.b2_dynamicBody;
 
             } else if (config.type === 'kinematic') {
 
-                body.type = Box2D.Dynamics.b2Body.b2_kinematicBody;
+                body.type = b2Body.b2_kinematicBody;
 
             } else {
 
-                body.type = Box2D.Dynamics.b2Body.b2_staticBody;
+                body.type = b2Body.b2_staticBody;
 
             }
 
             body.fixedRotation = config.fixedRotation;
             body.angle = options.rotate * (Math.PI / 180);
 
-            body.position = new Box2D.Common.Math.b2Vec2(
+            body.position = new b2Vec2(
                 metrics.x / config.scale,
                 metrics.y / config.scale
             );
@@ -98,7 +109,7 @@
                 if (options.points[key] !== undefined) {
 
                     vertices.push(
-                        new Box2D.Common.Math.b2Vec2(
+                        new b2Vec2(
                             (options.points[key][0] / config.scale),
                             options.points[key][1] / config.scale
                         )
@@ -112,7 +123,7 @@
             fixture.friction = config.friction;
             fixture.restitution = config.restitution;
 
-            fixture.shape = new Box2D.Collision.Shapes.b2PolygonShape();
+            fixture.shape = new b2PolygonShape();
             fixture.shape.SetAsArray(vertices, options.points.length);
 
             world._box2d.entity.CreateBody(body).CreateFixture(fixture);
@@ -141,8 +152,8 @@
         createWorld: function (config) {
 
             var world,
-                listener = new Box2D.Dynamics.b2ContactListener(),
-                debugDraw = new Box2D.Dynamics.b2DebugDraw(),
+                listener = new b2ContactListener(),
+                debugDraw = new b2DebugDraw(),
                 defaults = {
                     canvas: null,
                     gravity: 40,
@@ -165,7 +176,7 @@
 
             });
 
-            world = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, config.gravity), config.sleep);
+            world = new b2World(new b2Vec2(0, config.gravity), config.sleep);
 
             contactListeners.forEach(function (type) {
 
@@ -190,7 +201,7 @@
                 debugDraw.SetDrawScale(30);
                 debugDraw.SetFillAlpha(0.3);
                 debugDraw.SetLineThickness(1.0);
-                debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_centerOfMassBit);
+                debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_centerOfMassBit);
                 world.SetDebugDraw(debugDraw);
 
             }
@@ -206,7 +217,7 @@
 
         drawDebug: function () {
 
-            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof Box2D.Dynamics.b2World) {
+            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof b2World) {
 
                 this._box2d.entity.DrawDebugData();
 
@@ -298,7 +309,7 @@
 
             if (hasBox2DEntityRef(this)) {
 
-                this._box2d.entity.SetPosition(new Box2D.Common.Math.b2Vec2(x, y));
+                this._box2d.entity.SetPosition(new b2Vec2(x, y));
 
             }
 
@@ -323,7 +334,7 @@
                 this._box2d.entity.SetAwake(true);
 
                 this._box2d.entity.SetLinearVelocity(
-                    new Box2D.Common.Math.b2Vec2(x, y),
+                    new b2Vec2(x, y),
                     this._box2d.entity.GetWorldCenter()
                 );
 
@@ -333,7 +344,7 @@
 
         step: function () {
 
-            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof Box2D.Dynamics.b2World) {
+            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof b2World) {
 
                 this._box2d.entity.Step(1 / 60, 8, 3);
 
