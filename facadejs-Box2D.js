@@ -57,10 +57,10 @@
                 key,
                 defaults = {
                     type: 'static',
-                    fixedRotation: false,
+                    rotate: false,
                     density: 1.0,
-                    friction: 0.5,
-                    restitution: 0.5,
+                    friction: 1.0,
+                    restitution: 0.1,
                     scale: 30
                 };
 
@@ -96,7 +96,7 @@
 
             }
 
-            body.fixedRotation = config.fixedRotation;
+            body.fixedRotation = config.rotate ? false : true;
             body.angle = options.rotate * (Math.PI / 180);
 
             body.position = new b2Vec2(
@@ -156,7 +156,7 @@
                 debugDraw = new b2DebugDraw(),
                 defaults = {
                     canvas: null,
-                    gravity: 40,
+                    gravity: 20,
                     sleep: true
                 };
 
@@ -342,11 +342,17 @@
 
         },
 
-        step: function () {
+        step: function (callback) {
 
             if (hasBox2DEntityRef(this) && this._box2d.entity instanceof b2World) {
 
                 this._box2d.entity.Step(1 / 60, 8, 3);
+
+                if (callback !== undefined) {
+
+                    callback();
+
+                }
 
             }
 
