@@ -20,9 +20,17 @@
         b2Vec2 = Box2D.Common.Math.b2Vec2,
         b2World = Box2D.Dynamics.b2World;
 
-    function hasBox2DEntityRef(obj) {
+    function hasBox2DEntityRef(obj, type) {
 
-        return obj._box2d !== undefined && obj._box2d.entity !== undefined;
+        if (!type) {
+
+            type = b2Body;
+
+        }
+
+        return obj._box2d !== undefined &&
+            obj._box2d.entity !== undefined &&
+            obj._box2d.entity instanceof type;
 
     }
 
@@ -156,7 +164,7 @@
                 debugDraw = new b2DebugDraw(),
                 defaults = {
                     canvas: null,
-                    gravity: 20,
+                    gravity: [0, 20],
                     sleep: true
                 };
 
@@ -176,7 +184,7 @@
 
             });
 
-            world = new b2World(new b2Vec2(0, config.gravity), config.sleep);
+            world = new b2World(new b2Vec2(0, 0), config.sleep);
 
             contactListeners.forEach(function (type) {
 
@@ -211,13 +219,15 @@
                 config: config
             };
 
+            methods.setGravity.call(this, config.gravity);
+
             return this;
 
         },
 
         drawDebug: function () {
 
-            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof b2World) {
+            if (hasBox2DEntityRef(this, b2World)) {
 
                 this._box2d.entity.DrawDebugData();
 
@@ -305,6 +315,25 @@
 
         },
 
+        setGravity: function (gravity) {
+
+            if (hasBox2DEntityRef(this, b2World)) {
+
+                if (!(gravity instanceof b2Vec2)) {
+
+                    gravity = new b2Vec2(
+                        gravity[0],
+                        gravity[1]
+                    );
+
+                }
+
+                this._box2d.entity.SetGravity(gravity);
+
+            }
+
+        },
+
         setPosition: function (x, y) {
 
             if (hasBox2DEntityRef(this)) {
@@ -344,7 +373,7 @@
 
         step: function (callback) {
 
-            if (hasBox2DEntityRef(this) && this._box2d.entity instanceof b2World) {
+            if (hasBox2DEntityRef(this, b2World)) {
 
                 this._box2d.entity.Step(1 / 60, 8, 3);
 
