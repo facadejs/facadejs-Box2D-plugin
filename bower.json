@@ -1,0 +1,26 @@
+{
+    "name": "facadejs-Box2D-plugin",
+    "description": "An API wrapper for the Box2D JavaScript library.",
+    "version": "0.0.1",
+    "main": "facadejs-Box2D.js",
+    "license": "MIT",
+    "ignore": [
+    ],
+    "keywords": [
+        "canvas",
+        "drawing",
+        "box2d"
+    ],
+    "authors": [
+        {
+            "name": "Scott Doxey",
+            "email": "hello@scottdoxey.com",
+            "homepage": "http://scottdoxey.com/"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/neogeek/facadejs-Box2D-plugin"
+    },
+    "private": true
+}
