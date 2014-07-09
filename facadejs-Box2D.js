@@ -137,30 +137,30 @@
 
             if (hasBox2DEntityRef(world, b2World)) {
 
-            world._box2d.entity.CreateBody(body).CreateFixture(fixture);
+                world._box2d.entity.CreateBody(body).CreateFixture(fixture);
 
-            if (this._box2d !== undefined) {
+                if (this._box2d !== undefined) {
 
-                methods.destroyObject.call(this, world._box2d.entity);
+                    methods.destroyObject.call(this, world._box2d.entity);
 
-            }
-
-            this._box2d = {
-                entity: world._box2d.entity.GetBodyList(),
-                config: config,
-                callback: {
-                    BeginContact: null,
-                    EndContact: null,
-                    PostSolve: null,
-                    PreSolve: null
                 }
-            };
 
-            if (config.sync) {
+                this._box2d = {
+                    entity: world._box2d.entity.GetBodyList(),
+                    config: config,
+                    callback: {
+                        BeginContact: null,
+                        EndContact: null,
+                        PostSolve: null,
+                        PreSolve: null
+                    }
+                };
 
-                world._box2d.cache.sync.push(this);
+                if (config.sync) {
 
-            }
+                    world._box2d.cache.sync.push(this);
+
+                }
 
             } else {
 
