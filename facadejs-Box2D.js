@@ -65,6 +65,7 @@
                 key,
                 defaults = {
                     type: 'static',
+                    sync: true,
                     rotate: false,
                     density: 1.0,
                     friction: 1.0,
@@ -134,6 +135,8 @@
             fixture.shape = new b2PolygonShape();
             fixture.shape.SetAsArray(vertices, options.points.length);
 
+            if (hasBox2DEntityRef(world, b2World)) {
+
             world._box2d.entity.CreateBody(body).CreateFixture(fixture);
 
             if (this._box2d !== undefined) {
@@ -152,6 +155,18 @@
                     PreSolve: null
                 }
             };
+
+            if (config.sync) {
+
+                world._box2d.cache.sync.push(this);
+
+            }
+
+            } else {
+
+                console.error('Object supplied is not a valid Box2D world object.');
+
+            }
 
             return this;
 
@@ -186,6 +201,8 @@
 
             world = new b2World(new b2Vec2(0, 0), config.sleep);
 
+            world.userData = this;
+
             contactListeners.forEach(function (type) {
 
                 listener[type] = resolveContactListener.bind({ type: type });
@@ -216,7 +233,10 @@
 
             this._box2d = {
                 entity: world,
-                config: config
+                config: config,
+                cache: {
+                    sync: []
+                }
             };
 
             methods.setGravity.call(this, config.gravity);
@@ -237,15 +257,27 @@
 
         destroyObject: function () {
 
-            var self = this;
+            var self = this,
+                world;
 
             if (hasBox2DEntityRef(this)) {
+
+                world = self._box2d.entity.GetWorld();
+
+                if (hasBox2DEntityRef(world.userData, b2World)) {
+
+                    world.userData._box2d.cache.sync.splice(
+                        world.userData._box2d.cache.sync.indexOf(self),
+                        1
+                    );
+
+                }
 
                 self._box2d.entity.SetUserData(null);
 
                 setTimeout(function () {
 
-                    self._box2d.entity.GetWorld().DestroyBody(self._box2d.entity);
+                    world.DestroyBody(self._box2d.entity);
 
                     delete self._box2d;
 
@@ -373,9 +405,21 @@
 
         step: function (callback) {
 
+            var i,
+                length,
+                obj;
+
             if (hasBox2DEntityRef(this, b2World)) {
 
                 this._box2d.entity.Step(1 / 60, 8, 3);
+
+                for (i = 0, length = this._box2d.cache.sync.length; i < length; i += 1) {
+
+                    obj = this._box2d.cache.sync[i];
+
+                    obj.setOptions(obj.Box2D('getCurrentState'));
+
+                }
 
                 if (callback !== undefined) {
 
