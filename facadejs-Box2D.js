@@ -16,6 +16,7 @@
         b2ContactListener = Box2D.Dynamics.b2ContactListener,
         b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
         b2FixtureDef = Box2D.Dynamics.b2FixtureDef,
+        b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
         b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
         b2Vec2 = Box2D.Common.Math.b2Vec2,
         b2World = Box2D.Dynamics.b2World;
@@ -108,32 +109,46 @@
             body.fixedRotation = config.rotate ? false : true;
             body.angle = options.rotate * (Math.PI / 180);
 
-            body.position = new b2Vec2(
-                metrics.x / config.scale,
-                metrics.y / config.scale
-            );
 
-            for (key in options.points) {
+            if (this instanceof Facade.Circle) {
 
-                if (options.points[key] !== undefined) {
+                fixture.shape = new b2CircleShape(options.radius / config.scale);
 
-                    vertices.push(
-                        new b2Vec2(
-                            (options.points[key][0] / config.scale),
-                            options.points[key][1] / config.scale
-                        )
-                    );
+                body.position = new b2Vec2(
+                    (metrics.x + (metrics.width / 2)) / config.scale,
+                    (metrics.y + (metrics.height / 2)) / config.scale
+                );
+
+            } else {
+
+                body.position = new b2Vec2(
+                    metrics.x / config.scale,
+                    metrics.y / config.scale
+                );
+
+                for (key in options.points) {
+
+                    if (options.points[key] !== undefined) {
+
+                        vertices.push(
+                            new b2Vec2(
+                                (options.points[key][0] / config.scale),
+                                options.points[key][1] / config.scale
+                            )
+                        );
+
+                    }
 
                 }
+
+                fixture.shape = new b2PolygonShape();
+                fixture.shape.SetAsArray(vertices, options.points.length);
 
             }
 
             fixture.density = config.density;
             fixture.friction = config.friction;
             fixture.restitution = config.restitution;
-
-            fixture.shape = new b2PolygonShape();
-            fixture.shape.SetAsArray(vertices, options.points.length);
 
             if (hasBox2DEntityRef(world, b2World)) {
 
