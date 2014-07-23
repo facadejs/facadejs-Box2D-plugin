@@ -304,11 +304,15 @@
 
         getCurrentState: function () {
 
+            var pos;
+
             if (hasBox2DEntityRef(this)) {
 
+                pos = methods.getPosition.call(this);
+
                 return {
-                    x: this._box2d.entity.GetPosition().x * this._box2d.config.scale,
-                    y: this._box2d.entity.GetPosition().y * this._box2d.config.scale,
+                    x: pos.x,
+                    y: pos.y,
                     rotate: this._box2d.entity.GetAngle() * TO_DEGREES
                 };
 
@@ -318,14 +322,29 @@
 
         getPosition: function () {
 
+            var vector,
+                pos,
+                metrics;
+
             if (hasBox2DEntityRef(this)) {
 
-                var vector = this._box2d.entity.GetPosition();
+                vector = this._box2d.entity.GetPosition();
 
-                return {
-                    x: vector.x,
-                    y: vector.y
+                pos = {
+                    x: vector.x * this._box2d.config.scale,
+                    y: vector.y * this._box2d.config.scale
                 };
+
+                if (this instanceof Facade.Circle) {
+
+                    metrics = this.getAllMetrics();
+
+                    pos.x -= (metrics.width / 2);
+                    pos.y -= (metrics.height / 2);
+
+                }
+
+                return pos;
 
             }
 
