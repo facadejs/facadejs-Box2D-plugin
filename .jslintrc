@@ -1,0 +1,12 @@
+{
+    "browser": true,
+    "nomen": true,
+    "newcap": true,
+    "predef": [
+        "define",
+        "module",
+        "require",
+        "Facade",
+        "Box2D"
+    ]
+}
