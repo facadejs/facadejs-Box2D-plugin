@@ -1,4 +1,18 @@
-(function () {
+(function (root, factory) {
+
+    'use strict';
+
+    if (typeof define === 'function' && define.amd !== undefined) {
+
+        define(['facade', 'box2dweb'], factory);
+
+    } else {
+
+        factory(Facade, Box2D);
+
+    }
+
+}(this, function (Facade, Box2D) {
 
     'use strict';
 
@@ -503,4 +517,6 @@
 
     };
 
-}());
+    return Facade;
+
+}));
