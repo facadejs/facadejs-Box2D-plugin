@@ -378,6 +378,33 @@
 
         },
 
+        setForce: function (x, y) {
+
+            if (hasBox2DEntityRef(this)) {
+
+                if (x === undefined) {
+
+                    x = 0;
+
+                }
+
+                if (y === undefined) {
+
+                    y = 0;
+
+                }
+
+                this._box2d.entity.SetAwake(true);
+
+                this._box2d.entity.ApplyForce(
+                    new b2Vec2(x, y),
+                    this._box2d.entity.GetWorldCenter()
+                );
+
+            }
+
+        },
+
         setGravity: function (gravity) {
 
             if (hasBox2DEntityRef(this, b2World)) {
