@@ -28,7 +28,7 @@ require.config({
     'paths': {
         'facade': 'facade.js/facade.min',
         'facadejs-Box2D-plugin': 'facadejs-Box2D-plugin/facadejs-Box2D',
-        'box2dweb': 'facadejs-Box2D-plugin/vendor/box2dweb/Box2dWeb-2.1.a.3.min',
+        'box2dweb': 'facadejs-Box2D-plugin/vendor/box2dweb/Box2dWeb-2.1.a.3.min'
     },
     'shim': {
         'box2dweb': {
