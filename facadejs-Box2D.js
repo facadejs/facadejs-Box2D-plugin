@@ -450,17 +450,29 @@
 
         setVelocity: function (x, y) {
 
+            var currentVelocity;
+
             if (hasBox2DEntityRef(this)) {
+
+                currentVelocity = methods.getVelocity.call(this);
 
                 if (x === undefined) {
 
                     x = 0;
+
+                } else if (x === null) {
+
+                    x = currentVelocity.x;
 
                 }
 
                 if (y === undefined) {
 
                     y = 0;
+
+                } else if (y === null) {
+
+                    y = currentVelocity.y;
 
                 }
 
