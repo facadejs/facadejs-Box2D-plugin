@@ -442,6 +442,9 @@
 
             if (hasBox2DEntityRef(this)) {
 
+                x = x / this._box2d.config.scale;
+                y = y / this._box2d.config.scale;
+
                 this._box2d.entity.SetPosition(new b2Vec2(x, y));
 
             }
