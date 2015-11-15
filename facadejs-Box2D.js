@@ -142,7 +142,7 @@
                 vertices.push(new b2Vec2(0, metrics.height / config.scale));
 
                 fixture.shape = new b2PolygonShape();
-                fixture.shape.SetAsArray(vertices, options.points.length);
+                fixture.shape.SetAsArray(vertices, vertices.length);
 
             }
 
