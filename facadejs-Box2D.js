@@ -120,7 +120,6 @@
             body.fixedRotation = config.rotate ? false : true;
             body.angle = options.rotate * (Math.PI / 180);
 
-
             if (this instanceof Facade.Circle) {
 
                 fixture.shape = new b2CircleShape(options.radius / config.scale);
@@ -137,20 +136,10 @@
                     metrics.y / config.scale
                 );
 
-                for (key in options.points) {
-
-                    if (options.points[key] !== undefined) {
-
-                        vertices.push(
-                            new b2Vec2(
-                                (options.points[key][0] / config.scale),
-                                options.points[key][1] / config.scale
-                            )
-                        );
-
-                    }
-
-                }
+                vertices.push(new b2Vec2(0, 0));
+                vertices.push(new b2Vec2(metrics.width / config.scale, 0));
+                vertices.push(new b2Vec2(metrics.width / config.scale, metrics.height / config.scale));
+                vertices.push(new b2Vec2(0, metrics.height / config.scale));
 
                 fixture.shape = new b2PolygonShape();
                 fixture.shape.SetAsArray(vertices, options.points.length);
