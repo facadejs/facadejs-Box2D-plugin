@@ -1,6 +1,6 @@
-#Facade.js Box2D Plugin
+# Facade.js Box2D Plugin
 
-##Installing Using Bower
+## Installing Using Bower
 
 **bower.json**
 
@@ -8,9 +8,9 @@
 {
     "name": "example",
     "dependencies": {
-        "facade.js": "0.3.0-beta.4",
+        "facade.js": "0.3.0-beta.7",
         "facadejs-Box2D-plugin": "neogeek/facadejs-Box2D-plugin",
-        "requirejs": "2.1.14"
+        "requirejs": "2.1.20"
     },
     "private": true
 }
@@ -20,7 +20,7 @@
 $ bower install
 ```
 
-##Using Plugin With [RequireJS](http://requirejs.org/)
+## Using Plugin With [RequireJS](http://requirejs.org/)
 
 ```javascript
 require.config({
@@ -36,4 +36,14 @@ require.config({
         }
     }
 });
+```
+
+## Example Usage
+
+```javascript
+var world = new Facade.Entity().Box2D('createWorld', { canvas: stage.canvas, gravity: [ 0, 20 ] });
+
+var entity = new Facade({ x: 0, y: 0, width: 50, height: 50 });
+
+entity.Box2D('createObject', world, { type: 'dynamic', rotate: true, friction: 0.5 });
 ```
