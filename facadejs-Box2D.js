@@ -249,6 +249,7 @@
             this._box2d = {
                 entity: world,
                 config: config,
+                cleanup: [],
                 cache: {
                     sync: []
                 }
@@ -290,13 +291,7 @@
 
                 self._box2d.entity.SetUserData(null);
 
-                setTimeout(function () {
-
-                    world.DestroyBody(self._box2d.entity);
-
-                    delete self._box2d;
-
-                }, 0);
+                world.userData._box2d.cleanup.push(self._box2d.entity);
 
             }
 
@@ -488,6 +483,16 @@
             if (hasBox2DEntityRef(this, b2World)) {
 
                 this._box2d.entity.Step(1 / 60, 8, 3);
+
+                while (this._box2d.cleanup.length) {
+
+                    obj = this._box2d.cleanup.shift();
+
+                    this._box2d.entity.DestroyBody(obj);
+
+                    delete obj._box2d;
+
+                }
 
                 for (i = 0, length = this._box2d.cache.sync.length; i < length; i += 1) {
 
