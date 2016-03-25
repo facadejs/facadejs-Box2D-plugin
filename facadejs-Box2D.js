@@ -79,6 +79,7 @@
                     type: 'static',
                     sync: true,
                     rotate: false,
+                    sensor: false,
                     density: 1.0,
                     friction: 1.0,
                     restitution: 0.1,
@@ -146,6 +147,7 @@
 
             }
 
+            fixture.isSensor = config.sensor;
             fixture.density = config.density;
             fixture.friction = config.friction;
             fixture.restitution = config.restitution;
