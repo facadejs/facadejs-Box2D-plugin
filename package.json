@@ -4,6 +4,12 @@
   "version": "0.0.1",
   "main": "facadejs-Box2D.js",
   "license": "MIT",
+  "dependencies": {
+    "box2dweb": "2.1.0-b"
+  },
+  "scripts": {
+    "test": "make lint"
+  },
   "keywords": [
     "canvas",
     "drawing",

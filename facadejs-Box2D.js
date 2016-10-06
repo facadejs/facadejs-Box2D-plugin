@@ -2,7 +2,7 @@
 
     'use strict';
 
-    if (typeof define === 'function' && define.amd !== undefined) {
+    if (typeof define === 'function' && define.amd) {
 
         define(['facade', 'box2dweb'], factory);
 
@@ -10,12 +10,12 @@
 
         module.exports = factory(
             require('facade.js'),
-            require('facadejs-Box2D-plugin/vendor/box2dweb/Box2D')
+            require('box2dweb')
         );
 
     } else {
 
-        factory(Facade, Box2D);
+        root.returnExports = factory(Facade, Box2D);
 
     }
 
@@ -81,7 +81,6 @@
                 options = this._configOptions(this.getAllOptions()),
                 metrics = this.getAllMetrics(),
                 vertices = [],
-                key,
                 defaults = {
                     type: 'static',
                     sync: true,
