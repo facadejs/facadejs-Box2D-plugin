@@ -6,11 +6,10 @@
 
 ```json
 {
-    "devDependencies": {
+    "dependencies": {
         "facade.js": "0.3.0-beta.7",
         "facadejs-Box2D-plugin": "neogeek/facadejs-Box2D-plugin"
-    },
-    "private": true
+    }
 }
 ```
 
@@ -22,6 +21,8 @@ $ npm install
 
 ```javascript
 const stage = new Facade(document.querySelector('canvas'));
+
+require('facadejs-Box2D-plugin');
 
 const world = new Facade.Entity().Box2D('createWorld', {
     'canvas': stage.canvas,
