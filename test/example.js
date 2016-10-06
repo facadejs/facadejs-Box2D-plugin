@@ -1,25 +1,3 @@
-# Facade.js Box2D Plugin
-
-## Installing Using NPM
-
-**package.json**
-
-```json
-{
-    "dependencies": {
-        "facade.js": "0.3.0-beta.7",
-        "facadejs-Box2D-plugin": "neogeek/facadejs-Box2D-plugin"
-    }
-}
-```
-
-```bash
-$ npm install
-```
-
-## Example Usage
-
-```javascript
 const Facade = require('facade.js');
 
 require('../facadejs-Box2D');
@@ -66,4 +44,11 @@ stage.draw(function () {
     world.Box2D('drawDebug');
 
 });
-```
+
+module.exports = {
+    box,
+    Facade,
+    floor,
+    stage,
+    world
+};
