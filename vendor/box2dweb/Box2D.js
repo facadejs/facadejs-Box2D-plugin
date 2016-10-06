@@ -17,6 +17,12 @@
 */
 var Box2D = {};
 
+if (typeof module === 'object' && module.exports) {
+
+   module.exports = Box2D;
+
+}
+
 (function (a2j, undefined) {
 
    if(!(Object.prototype.defineProperty instanceof Function)
