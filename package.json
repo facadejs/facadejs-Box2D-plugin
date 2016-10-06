@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "main": "facadejs-Box2D.js",
   "license": "MIT",
-  "ignore": [],
   "keywords": [
     "canvas",
     "drawing",
