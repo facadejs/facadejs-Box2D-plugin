@@ -6,6 +6,13 @@
 
         define(['facade', 'box2dweb'], factory);
 
+    } else if (typeof module === 'object' && module.exports) {
+
+        module.exports = factory(
+            require('facade.js'),
+            require('facadejs-Box2D-plugin/vendor/box2dweb/Box2D')
+        );
+
     } else {
 
         factory(Facade, Box2D);
